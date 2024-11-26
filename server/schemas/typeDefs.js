@@ -49,4 +49,6 @@ const typeDefs = `
     createEvent(title: String!, description: String, location: String!, date: String!, time: String!, price: Float!, capacity: Int): Event
     purchaseTicket(_id: ID!): Ticket
     }
-    `
+    `;
+
+module.exports = typeDefs;

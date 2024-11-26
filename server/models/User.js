@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const ticketSchema = require('./Ticket');
 
 const userSchema = new Schema(
     {
@@ -29,4 +30,4 @@ const userSchema = new Schema(
 
 const User = model('User', userSchema);
 
-module.exports = User;
+module.exports = User, userSchema;

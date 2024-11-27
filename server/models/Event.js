@@ -17,6 +17,31 @@ const eventSchema = new Schema(
         date: {
             type: Date,
             required: true
+        },
+        time: {
+            type: String,
+            required: true
+        },
+        price: {
+            type: Float,
+            required: true
+        },
+        capacity: {
+            type: Int
+        },
+        ticketsLeft: {
+            type: Int,
+            default: 0
+        }, 
+        createdAt: {
+            type: Date,
+            default: Date.now
+        },
+        updatedAt: {
+            type: Date,
+            default: Date.now
         }
     }
-)
+);
+
+module.exports = eventSchema;

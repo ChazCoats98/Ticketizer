@@ -1,3 +1,5 @@
+const { User, Ticket, Event } = require('../models');
+
 const resolvers = {
     Query: {
         user: async (parent, args, context) => {

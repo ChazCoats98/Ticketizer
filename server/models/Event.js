@@ -23,14 +23,14 @@ const eventSchema = new Schema(
             required: true
         },
         price: {
-            type: Float,
+            type: Number,
             required: true
         },
         capacity: {
-            type: Int
+            type: Number
         },
         ticketsLeft: {
-            type: Int,
+            type: Number,
             default: 0
         }, 
         createdAt: {

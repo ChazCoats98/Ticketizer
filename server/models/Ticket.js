@@ -12,9 +12,14 @@ const ticketSchema = new Schema(
             type: Date,
             required: true
         },
-        event: eventSchema,
-        attendee: userSchema
+        event: {
+            type: Schema.Types.ObjectId,
+            ref: 'Event',
+            required: true
+        }
     }
 )
 
-module.exports = ticketSchema;
+const Ticket = model('Ticket', ticketSchema);
+
+module.exports = Ticket, ticketSchema;

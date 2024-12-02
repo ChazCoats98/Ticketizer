@@ -1,12 +1,12 @@
-require('@dotenv').config()
+require('dotenv').config()
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require('./schemas');
-import { 
-    ApolloServerPluginDrainHttpServer,
-    ApolloServerPluginLandingPageLocalDefault
-} from 'apollo-server-core';
-import http from 'http';
+
+const {
+    ApolloServerPluginDrainHttpServer, 
+    ApolloServerPluginLandingPageLocalDefault} = require('apollo-server-core');
+const { http } = require('http');
 
 async function startServer(typeDefs, resolvers) {
     const app = express();

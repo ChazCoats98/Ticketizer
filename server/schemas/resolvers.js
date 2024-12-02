@@ -26,7 +26,19 @@ const resolvers = {
     },
     Mutation:{
         login: async (parent, { email, password }) => {
+            const user = await User.findOne({ email });
 
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const correctPassword = await user.checkPassword(password);
+            
+            if (!correctPassword) {
+                throw new Error('Invalid password');
+            }
+
+            
         },
         register: async (parent, {username, email, password, createdAt}) => {
 

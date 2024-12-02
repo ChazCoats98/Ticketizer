@@ -44,4 +44,6 @@ const eventSchema = new Schema(
     }
 );
 
-module.exports = eventSchema;
+Event = model('event', eventSchema);
+
+module.exports = Event, eventSchema;

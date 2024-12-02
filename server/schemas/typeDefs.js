@@ -46,6 +46,8 @@ const typeDefs = `
     type Mutation {
     login(email: String!, password: String!): AuthPayload
     register(username: String!, email: String!, password: String!): AuthPayload
+    updateUsername(_id: ID!, email: String!): User
+    updateEmail(_id: ID!, email: String!): User
     createEvent(title: String!, description: String, location: String!, date: String!, time: String!, price: Float!, capacity: Int): Event
     purchaseTicket(_id: ID!): Ticket
     }

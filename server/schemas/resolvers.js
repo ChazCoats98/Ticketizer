@@ -1,4 +1,5 @@
 const { User, Ticket, Event } = require('../models');
+const {signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
     Query: {
@@ -38,10 +39,20 @@ const resolvers = {
                 throw new Error('Invalid password');
             }
 
-            
+            const token = signToken(user);
+            return { token };
         },
         register: async (parent, {username, email, password, createdAt}) => {
+            const user = await User.create({ username, email, password, createdAt: new Date() });
+            const token = signToken(user);
 
+            return { token, user };
+        },
+        updateUsername: async (parent, {userId, username }) => {
+            return User.findByIdAndUpdate(userId, { $set: { username }}, { new: true });
+        },
+        updateEmail: async (parent, {userId, email}) => {
+            return User.findByIdAndUpdate(userId, { $set: { email }}, { new: true });
         }
     }
 }

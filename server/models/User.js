@@ -25,7 +25,12 @@ const userSchema = new Schema(
             type: Date,
             default: Date.now
         },
-        purchases: [ticketSchema]
+        purchases: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Ticket'
+            }
+        ]
     }
 );
 

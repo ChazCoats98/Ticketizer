@@ -24,3 +24,21 @@ const authMiddleware = function ({ req }) {
 
     return req;
 };
+
+const signToken = function({ email, _id }) {
+    const payload = { email, _id };
+
+    return jwt.sign(payload, secret, { expiresIn: expiration });
+};
+
+const AuthenticationError = new GraphQLError('Error authenticating user.', {
+    extensions: {
+        code: 'AUTH_ERROR',
+    },
+});
+
+module.exports = {
+    authMiddleware,
+    signToken,
+    AuthenticationError,
+};

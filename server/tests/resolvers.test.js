@@ -2,11 +2,12 @@ const { ApolloServer } = require('apollo-server-express');
 const { startStandaloneServer } = require('apollo-server-core');
 const { typeDefs, resolvers } = require('../schemas');
 const { User, Ticket, Event } = require('../models');
+const { signToken } = require('../utils/auth');
 const { describe, expect, test, mock } = require('jest');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
-mock('../models');
+jest.mock('../models');
 
 describe('resolvers', () => {
     let server;
@@ -18,6 +19,10 @@ describe('resolvers', () => {
         email: 'mockUser@email.com',
         password: 'mockUserPassword19$'
     }
+
+    const mockContext = {
+        user: { _id: 'mockUserId' }
+    };
 
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create();
@@ -40,7 +45,13 @@ describe('resolvers', () => {
         await mongoose.connection.close();
     });
 
-    test('Querying for user', async () => {
-        
+    describe('Query: user', () => {
+        it('should fetch the logged in user', async () => {
+            User.findById.mockResolvedValue(mockUser);
+
+            const result = await resolvers.Query.user(null, null, mockContext);
+            expect(result).toEqual(mockUser);
+            expect(user.findById).toHaveBeenCalledWith("mockUserId");
+        });
     });
 });

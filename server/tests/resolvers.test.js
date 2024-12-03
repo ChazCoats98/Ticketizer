@@ -3,7 +3,6 @@ const { startStandaloneServer } = require('apollo-server-core');
 const { typeDefs, resolvers } = require('../schemas');
 const { User, Ticket, Event } = require('../models');
 const { signToken } = require('../utils/auth');
-const { describe, expect, test, mock } = require('jest');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
@@ -17,7 +16,16 @@ describe('resolvers', () => {
         _id: 'mockUserId',
         username:'mockUser',
         email: 'mockUser@email.com',
-        password: 'mockUserPassword19$'
+        createdAt: new Date(),
+        purchases: [],
+        select: jest.fn().mockReturnThis(),
+        populate: jest.fn().mockResolvedValue({
+            _id: 'mockUserId',
+            username: 'mockUser',
+            email: 'mockUser@email.com',
+            createdAt: new Date(),
+            purchases: []
+        })
     }
 
     const mockContext = {
@@ -47,11 +55,20 @@ describe('resolvers', () => {
 
     describe('Query: user', () => {
         it('should fetch the logged in user', async () => {
-            User.findById.mockResolvedValue(mockUser);
+            User.findById.mockReturnValue(mockUser);
 
             const result = await resolvers.Query.user(null, null, mockContext);
-            expect(result).toEqual(mockUser);
-            expect(user.findById).toHaveBeenCalledWith("mockUserId");
+
+            expect(result).toEqual({
+                _id:'mockUserId',
+                username:'mockUser',
+                email:'mockUser@email.com',
+                createdAt: expect.any(Date),
+                purchases: []
+            });
+            expect(User.findById).toHaveBeenCalledWith("mockUserId");
+            expect(mockUser.select).toHaveBeenCalledWith('username email createdAt purchases');
+            expect(mockUser.populate).toHaveBeenCalledWith('purchases');
         });
     });
 });

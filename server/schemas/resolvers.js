@@ -52,7 +52,7 @@ const resolvers = {
             const event = await Event.create({ title, description, location, date, time, price, capacity, createdAt: new Date() });
             return event;
         },
-        purchaseTicker: async (parent, { eventId, type }, context) => {
+        purchaseTicket: async (parent, { eventId, type }, context) => {
             if (!context.user) {
                 throw new Error('You must be logged in to purchase tickets.');
             }

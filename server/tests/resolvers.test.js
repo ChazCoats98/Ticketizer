@@ -70,5 +70,9 @@ describe('resolvers', () => {
             expect(mockUser.select).toHaveBeenCalledWith('username email createdAt purchases');
             expect(mockUser.populate).toHaveBeenCalledWith('purchases');
         });
+
+        it('should throw an error if user is not authenticated', async () => {
+            await expect(resolvers.Query.user(null, null, {})).rejects.toThrow('Error authenticating user.');
+        });
     });
 });

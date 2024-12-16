@@ -13,10 +13,10 @@ const resolvers = {
             }
         },
         events: async () => {
-            return Event.find().select('title description location date time price capacity ticketsLeft createdAt updatedAt');
+            return Event.find().select('title description location date price capacity ticketsLeft createdAt updatedAt');
         },
         event: async (parent, {eventId}) => {
-            return Event.findById(eventId).select('title description location date time price capacity ticketsLeft createdAt updatedAt');
+            return Event.findById(eventId).select('title description location date price capacity ticketsLeft createdAt updatedAt');
         }
     },
     Mutation:{
@@ -49,7 +49,7 @@ const resolvers = {
             return User.findByIdAndUpdate(userId, { $set: { email }}, { new: true });
         },
         createEvent: async (parent, { title, description, location, date, time, price, capacity }) => {
-            const event = await Event.create({ title, description, location, date, time, price, capacity, createdAt: new Date() });
+            const event = await Event.create({ title, description, location, date, price, capacity, createdAt: new Date() });
             return event;
         },
         purchaseTicket: async (parent, { eventId, type }, context) => {

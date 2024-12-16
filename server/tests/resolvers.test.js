@@ -7,26 +7,9 @@ const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 jest.mock('../models');
-
 describe('resolvers', () => {
     let server;
     let mongoServer;
-
-    const mockUser = {
-        _id: 'mockUserId',
-        username:'mockUser',
-        email: 'mockUser@email.com',
-        createdAt: new Date(),
-        purchases: [],
-        select: jest.fn().mockReturnThis(),
-        populate: jest.fn().mockResolvedValue({
-            _id: 'mockUserId',
-            username: 'mockUser',
-            email: 'mockUser@email.com',
-            createdAt: new Date(),
-            purchases: []
-        })
-    }
 
     const mockContext = {
         user: { _id: 'mockUserId' }
@@ -55,6 +38,21 @@ describe('resolvers', () => {
 
     describe('Query: user', () => {
         it('should fetch the logged in user', async () => {
+            const mockUser = {
+                _id: 'mockUserId',
+                username:'mockUser',
+                email: 'mockUser@email.com',
+                createdAt: new Date(),
+                purchases: [],
+                select: jest.fn().mockReturnThis(),
+                populate: jest.fn().mockResolvedValue({
+                    _id: 'mockUserId',
+                    username: 'mockUser',
+                    email: 'mockUser@email.com',
+                    createdAt: new Date(),
+                    purchases: []
+                })
+            }
             User.findById.mockReturnValue(mockUser);
 
             const result = await resolvers.Query.user(null, null, mockContext);
@@ -75,4 +73,80 @@ describe('resolvers', () => {
             await expect(resolvers.Query.user(null, null, {})).rejects.toThrow('Error authenticating user.');
         });
     });
+
+    describe('Query: events', () => {
+        it('should fetch all events', async () => {
+            const mockEvents = [
+                {
+                    title: 'Event 1', 
+                    description: 'Description 1', 
+                    location: '4 event place', 
+                    date: new Date(), 
+                    price: 59.99,
+                    capacity: 100,
+                    ticketsLeft: 50,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    title: 'Event 2', 
+                    description: 'Description 2', 
+                    location: '7 event place', 
+                    date: new Date(), 
+                    price: 79.99,
+                    capacity: 200,
+                    ticketsLeft: 150,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            ];
+
+            Event.find.mockReturnValue({
+                select: jest.fn().mockResolvedValue(mockEvents)
+            });
+
+            const result = await resolvers.Query.events();
+            expect(result).toEqual([
+                {
+                    title: 'Event 1', 
+                    description: 'Description 1', 
+                    location: '4 event place', 
+                    date: expect.any(Date), 
+                    price: 59.99,
+                    capacity: 100,
+                    ticketsLeft: 50,
+                    createdAt: expect.any(Date),
+                    updatedAt: expect.any(Date)
+                },
+                {
+                    title: 'Event 2', 
+                    description: 'Description 2', 
+                    location: '7 event place', 
+                    date: expect.any(Date), 
+                    price: 79.99,
+                    capacity: 200,
+                    ticketsLeft: 150,
+                    createdAt: expect.any(Date),
+                    updatedAt: expect.any(Date)
+                }
+            ]);
+            expect(Event.find).toHaveBeenCalledWith();
+        });
+    });
+
+    describe('Query: Event', () => {
+        it('should fetch a single event', async () => {
+            const mockEvent = {
+                title: 'Event 1', 
+                description: 'Description 1', 
+                location: '4 event place', 
+                date: new Date(), 
+                price: 59.99,
+                capacity: 100,
+                ticketsLeft: 50,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+        })
+    })
 });

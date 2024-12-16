@@ -29,7 +29,6 @@ const typeDefs = `
     description: String
     location: String!
     date: Date!
-    time: String!
     price: Float!
     capacity: Int
     ticketsLeft: Int

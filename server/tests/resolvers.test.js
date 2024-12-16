@@ -137,9 +137,10 @@ describe('resolvers', () => {
     describe('Query: Event', () => {
         it('should fetch a single event', async () => {
             const mockEvent = {
+                _id: 'mockEventId123',
                 title: 'Event 1', 
                 description: 'Description 1', 
-                location: '4 event place', 
+                location: '123 Event Street', 
                 date: new Date(), 
                 price: 59.99,
                 capacity: 100,
@@ -147,6 +148,25 @@ describe('resolvers', () => {
                 createdAt: new Date(),
                 updatedAt: new Date()
             };
+
+            Event.findById.mockReturnValue({
+                select: jest.fn().mockResolvedValue(mockEvent)
+            });
+
+            const result = await resolvers.Query.event(null, { eventId:'mockEventId123' });
+            expect(result).toEqual({
+                _id:'mockEventId123',
+                title: 'Event 1', 
+                description: 'Description 1', 
+                location: '123 Event Street', 
+                date: expect.any(Date), 
+                price: 59.99,
+                capacity: 100,
+                ticketsLeft: 50,
+                createdAt: expect.any(Date),
+                updatedAt: expect.any(Date)
+            });
+            expect(Event.findById).toHaveBeenCalledWith('mockEventId123');
         })
     })
 });
